@@ -1,5 +1,8 @@
+var xCord = "0";
+var yCord = "0";
+
 function preload(){
-    
+    picture = loadImage(" https://i.postimg.cc/3x3QzSGq/m.png");
 }
 
 function setup(){
@@ -14,22 +17,27 @@ function setup(){
         console.log("Model Loaded");
     });
 
-    poseNet.on("pose",gotPoses);
-        
-}
+    poseNet.on("pose",(results) => {
+        if(results.length > 0){
+            console.log(results);
 
-function gotPoses(results){
-    if(results.length > 0){
-        console.log(results);
+            xCord = results[0].pose.nose.x;
+            yCord = results[0].pose.nose.y;
 
-        xCord = results[0].pose.nose.x;
-        yCord = results[0].pose.nose.y;
-
-        console.log("Nose X = " + xCord);
-        console.log("Nose Y = " + yCord);
-    }
+            console.log("Nose X = " + xCord);
+            console.log("Nose Y = " + yCord);
+        }
+    });
 }
 
 function draw(){
-    
+    image(video,0,0,400,300);
+
+    fill(255,0,0);
+    stroke(255,0,0);
+    image(picture,xCord - 17,yCord - 5,35,35);
+}
+
+function takeSnapshot(){
+    save("filter.png");
 }
